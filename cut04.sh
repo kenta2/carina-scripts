@@ -27,7 +27,7 @@ scriptdir=carina-scripts
 date
 bash $scriptdir/cut03.sh $input $smallwidth $smallheight
 date
-for file in $input-a*png
+for file in $input-a-*.png
 do q=${file%.png}
     pngtopnm $file > $q
     bash $scriptdir/recolor.sh $q
