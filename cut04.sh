@@ -37,4 +37,5 @@ do q=${file%.png}
     # rm $file
     # postpone removing to experiment with image compression types
 done
+ls -l
 date
