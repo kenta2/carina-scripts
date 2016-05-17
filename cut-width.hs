@@ -1,8 +1,9 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module Main  where{
-import IO;
-import System;
+import System.IO;
+import System.Environment;
 import Data.Char;
-import List;
+import Data.List;
 import Data.Ord;
 
 main :: IO(());
@@ -10,12 +11,13 @@ main = (do{
   (hPutStrLn stderr rcs_code);
   (getArgs >>= (\lambda_case_var ->case lambda_case_var of {
   ["nothing"]-> (return ());
+  ["cut-points", (x), (y)]-> (putStrLn(unwords((map show)((cut_points (read x) (read y))))));
   ["test", (x), (y)]-> (test (read x) (read y))
 }));
 });
 powers_of_two = ((:) 1 (map ((*) 2) powers_of_two));
 rcs_code :: String;
-rcs_code = "$Id: kenserve.ll,v 1.2 2009/02/06 19:35:45 o Exp o $";
+rcs_code = "$Id: cut-width.ll,v 1.1 2016/05/16 07:22:55 kenta Exp kenta $";
 div_rounding_up :: Int -> Int -> Int;
 div_rounding_up x y = (case (divMod x y) of {
   ((d), (0))-> d;
