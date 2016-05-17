@@ -23,7 +23,7 @@ smallheight=$1
 shift
 
 date
-script=carina=scripts/cut01.sh
+script=carina-scripts/cut01.sh
 bash $script $input $smallwidth $smallheight
 z=$(printf "%05d" $smallwidth)
 for file in $input-a-[xy]0-$z-*
