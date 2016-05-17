@@ -31,6 +31,7 @@ for file in $input-a*png
 do q=${file%.png}
     pngtopnm $file > $q
     bash $scriptdir/recolor.sh $q
+    ls -l $file
     rm $q $file
     # remove $file because rgb-000 is the same
 done
