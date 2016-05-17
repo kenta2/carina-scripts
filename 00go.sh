@@ -7,5 +7,5 @@ set -x
 if [ -z "$1" ]
 then exit 1
 fi
-nice time carina-scripts/cut04.sh $1 960 540 > log 2>&1
+nice time bash carina-scripts/cut04.sh $1 960 540 > log 2>&1
 xz log
