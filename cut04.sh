@@ -38,4 +38,5 @@ do q=${file%.png}
     # postpone removing to experiment with image compression types
 done
 ls -l
+bash $scriptdir/in-directories.sh $input
 date
