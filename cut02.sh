@@ -24,7 +24,8 @@ shift
 
 date
 script=carina-scripts/cut01.sh
-bash $script $input $smallwidth $smallheight
+if false
+then bash $script $input $smallwidth $smallheight
 z=$(printf "%05d" $smallwidth)
 for file in $input-a-[xy]0-$z-*
 do pngtopnm $file | pnmscale 2 | pnmtopng > temp
@@ -32,6 +33,8 @@ do pngtopnm $file | pnmscale 2 | pnmtopng > temp
 done
 
 date
+
+fi
 
 smallwidth=$(expr $smallwidth + $smallwidth)
 smallheight=$(expr $smallheight + $smallheight)
