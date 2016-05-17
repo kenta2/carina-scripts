@@ -9,7 +9,7 @@ ppmtorgb3 < $input
 for file in red grn blu
 do pnminvert noname.$file > invert.$file
 done
-$HOME/shplay/more-carina/x.permutations $input|bash
+carina-scripts/x.permutations $input|bash
 #for file in $input-*.png
 #do pp=${file%.png}
 #    convert $file -quality 0 $pp.jp2
