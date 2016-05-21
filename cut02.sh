@@ -51,4 +51,6 @@ do pngtopnm $file | pnmscale 0.5 | pnmtopng > temp
     mv temp $file
 done
 
+#smallest is 7121
+
 date
