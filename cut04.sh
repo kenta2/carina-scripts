@@ -25,6 +25,11 @@ shift
 
 scriptdir=carina-scripts
 date
+
+pushd $scriptdir
+git log -n 1 || true
+popd
+
 bash $scriptdir/cut03.sh $input $smallwidth $smallheight
 date
 for file in $input-a-*.png
