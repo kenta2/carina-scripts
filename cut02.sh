@@ -24,7 +24,7 @@ shift
 
 date
 script=carina-scripts/cut01.sh
-if false
+if [ "$do_half_size" = "1" ]
 then bash $script $input $smallwidth $smallheight
 z=$(printf "%05d" $smallwidth)
 for file in $input-a-[xy]0-$z-*

@@ -7,21 +7,33 @@ then exit 1
 fi
 ppmtorgb3 < $input
 for file in red grn blu
-do pnmnorm -bpercent 1 -wpercent 1 noname.$file > temp
-    mv temp noname.$file
+do if ! [ "$no_normalize" = "1" ]
+        then pnmnorm -bpercent 1 -wpercent 1 noname.$file > temp
+        mv temp noname.$file
+    fi
     pnminvert noname.$file > invert.$file
 done
 carina-scripts/x.permutations $input|bash
-for file in $input-*.png
-do pp=${file%.png}
-    convert $file -quality 0 $pp.jp2
-    pngtopnm $file > $pp.ppm
-    sha224sum $pp.ppm
-    cjpeg $pp.ppm > $pp.jpg
-    # quality 92 be default, not downsampling chroma channels
-    convert $pp.ppm $pp.i.jpg
-    ls -l $file $pp.jp2 $pp.jpg $pp.i.jpg
-    rm $file $pp.jp2 $pp.i.jpg $file.ppm
+for fileppm in $input-*-z.ppm
+do pp=${fileppm%.ppm}
+    cjpeg $fileppm > $pp.jpg
+    if [ "$compress_test" = 1 ]
+        then convert $fileppm -quality 0 $pp.jp2 && convert $pp.jp2 $pp.jp2.ppm
+        # -E100 switch for another day; it takes twice as long
+        flif -e $fileppm $pp.flif && flif -d $pp.flif $pp.flif.ppm
+        # quality 92 by default, not downsampling chroma channels
+        convert $fileppm $pp.i.jpg
+        # omit -brute because it takes too long
+        pnmtopng -compression 9 $fileppm > $pp.png && pngcrush -q $pp.png $pp.crush.png && pngtopnm $pp.crush.png > $pp.crush.ppm
+        sha224sum $fileppm
+        wait
+        jobs
+        cmp $fileppm $pp.jp2.ppm
+        cmp $fileppm $pp.flif.ppm
+        cmp $fileppm $pp.crush.ppm
+        ls -l $pp.jp2 $pp.flif $pp*.jpg $pp*.png
+    fi
+    rm -f $pp.jp2 $pp.flif $pp.i.jpg $pp*png $pp*ppm
 done
 
 for file in red grn blu

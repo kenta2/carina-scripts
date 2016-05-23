@@ -59,7 +59,11 @@ outfile (s,b) = [head s] ++ number b;
 mk_command :: String -> [String] -> String -> String;
 -- Currently do not have enough disk space for lossless.
 -- Curiously, jp2 is sometimes worse than png.
-mk_command prefix ins suffix = "rgb3toppm " ++ unwords ins ++ " | cjpeg > " ++ prefix ++ "-"++suffix++".jpg";
+mk_command prefix ins suffix = let {
+ out :: String;
+ out = prefix ++ "-"++suffix++"-z.ppm";
+} in ": " ++ out ++ "\n"
+++ "rgb3toppm " ++ unwords ins ++ " > " ++ out;
 
 --(zip colors inv & map outfile & concat);
 mk_suffix :: [String] -> [Bool] -> String;
