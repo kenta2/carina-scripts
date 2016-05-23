@@ -32,6 +32,7 @@ do pp=${fileppm%.ppm}
         cmp $fileppm $pp.flif.ppm
         cmp $fileppm $pp.crush.ppm
         ls -l $pp.jp2 $pp.flif $pp*.jpg $pp*.png
+        rm $pp.jpg
     fi
     rm -f $pp.jp2 $pp.flif $pp.i.jpg $pp*png $pp*ppm
 done
