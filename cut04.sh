@@ -34,8 +34,7 @@ do q=${file%.png}
     rm $q
     ls -l $file
     # remove $file because rgb-000 is the same
-    # rm $file
-    # postpone removing to experiment with image compression types
+    rm $file
 done
 ls -l
 bash $scriptdir/in-directories.sh $input
