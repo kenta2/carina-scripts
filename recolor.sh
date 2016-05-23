@@ -8,12 +8,18 @@ fi
 ppmtorgb3 < $input
 for file in red grn blu
 do if ! [ "$no_normalize" = "1" ]
-    then opts=$(pgmhist noname.$file | perl carina-scripts/normoptions.pl)
-        if [ "$opts" ]
-        then pnmnorm $opts noname.$file > temp
+    then pgmhist noname.$file
+        : done histogram
+        if [ "$less_saturated" = 1 ]
+        then opts=$(pgmhist noname.$file | perl carina-scripts/normoptions.pl)
+            if [ "$opts" ]
+            then pnmnorm $opts noname.$file > temp
+                mv temp noname.$file
+            else
+                : no normalization necessary
+            fi
+        else pnmnorm -bpercent 1 -wpercent 1 noname.$file > temp
             mv temp noname.$file
-        else
-            : no normalization necessary
         fi
     fi
     pnminvert noname.$file > invert.$file
