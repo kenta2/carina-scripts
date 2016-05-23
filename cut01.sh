@@ -19,12 +19,12 @@ if [ -z "$1" ]
 then exit 1
 fi
 smallwidth=$1
-zsmallwidth=$(printf '%05d' $smallwidth)
 shift
 if [ -z "$1" ]
 then exit 1
 fi
 smallheight=$1
+zsmallheight=$(printf '%05d' $smallheight)
 shift
 #avoid spamming error output immediately
 #sleep 1
@@ -39,7 +39,7 @@ do zwidth=$(printf '%05d' $width)
     for hei in `$cut_width cut-points $bigwidth $smallheight`
     do zhei=$(printf '%05d' $hei)
         #echo hh $hei $zhei
-        pnmcut $hei 0 $smallheight 0 $tempfile | pnmflip -r90 | pnmtopng > $input-a-y0-$zsmallwidth-$zwidth-$zhei.png
+        pnmcut $hei 0 $smallheight 0 $tempfile | pnmflip -r90 | pnmtopng > $input-a-y0-$zsmallheight-$zwidth-$zhei.png
     done
 done
 
@@ -51,8 +51,8 @@ do zwidth=$(printf '%05d' $width)
     for hei in `$cut_width cut-points $bigheight $smallheight`
     do zhei=$(printf '%05d' $hei)
         #echo hh $hei $zhei
-        pnmcut 0 $hei 0 $smallheight $tempfile | pnmtopng > $input-a-x0-$zsmallwidth-$zwidth-$zhei.png
+        pnmcut 0 $hei 0 $smallheight $tempfile | pnmtopng > $input-a-x0-$zsmallheight-$zwidth-$zhei.png
     done
 done
 
-rm $tempfile
+rm -f $tempfile
