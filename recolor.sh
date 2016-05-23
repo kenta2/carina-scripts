@@ -24,13 +24,14 @@ do pp=${fileppm%.ppm}
         # quality 92 by default, not downsampling chroma channels
         convert $fileppm $pp.i.jpg
         # omit -brute because it takes too long
-        pnmtopng -compression 9 $fileppm > $pp.png && pngcrush -q $pp.png $pp.crush.png && pngtopnm $pp.crush.png > $pp.crush.ppm
+        pnmtopng -compression 9 $fileppm > $pp.png && pngtopnm $pp.png > $pp.png.ppm && pngcrush -q $pp.png $pp.crush.png && pngtopnm $pp.crush.png > $pp.crush.ppm
         sha224sum $fileppm
         wait
         jobs
+        #compare against the png version because it handles grayscale converted images better
         cmp $fileppm $pp.jp2.ppm
-        cmp $fileppm $pp.flif.ppm
-        cmp $fileppm $pp.crush.ppm
+        cmp $pp.png.ppm $pp.flif.ppm
+        cmp $pp.png.ppm $pp.crush.ppm
         ls -l $pp.jp2 $pp.flif $pp*.jpg $pp*.png
         rm $pp.jpg
     fi
