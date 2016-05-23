@@ -2,9 +2,6 @@
 module Main  where{
 import System.IO;
 import System.Environment;
-import Data.Char;
-import Data.List;
-import Data.Ord;
 
 main :: IO(());
 main = (do{
@@ -12,12 +9,14 @@ main = (do{
   (getArgs >>= (\lambda_case_var ->case lambda_case_var of {
   ["nothing"]-> (return ());
   ["cut-points", (x), (y)]-> (putStrLn(unwords((map show)((cut_points (read x) (read y))))));
-  ["test", (x), (y)]-> (test (read x) (read y))
+  ["test", (x), (y)]-> (test (read x) (read y));
+  (_)-> undefined
 }));
 });
+powers_of_two :: [](Int);
 powers_of_two = ((:) 1 (map ((*) 2) powers_of_two));
 rcs_code :: String;
-rcs_code = "$Id: cut-width.ll,v 1.1 2016/05/16 07:22:55 kenta Exp kenta $";
+rcs_code = "$Id: cut-width.ll,v 1.2 2016/05/23 01:28:45 kenta Exp kenta $";
 div_rounding_up :: Int -> Int -> Int;
 div_rounding_up x y = (case (divMod x y) of {
   ((d), (0))-> d;
@@ -44,7 +43,7 @@ data Rescale  = Rescale(Int);
 do_rescale :: Rescale -> String;
 do_rescale rscale = (case rscale of {
   (Rescale(1))-> [];
-  (Rescale(x))-> ("| pnmscale " ++ (show ((/) 1.0 (fromIntegral x))) ++ " ")
+  (Rescale(x))-> ("| pnmscale " ++ (show ((/) (1.0 :: Double) (fromIntegral x))) ++ " ")
 });
 do_rotation :: String -> String;
 do_rotation rot = (case rot of {
@@ -53,7 +52,7 @@ do_rotation rot = (case rot of {
 });
 instance Show (Rescale) where {
 show x = (case x of {
-  (Rescale(x))-> ((show x))
+  (Rescale(y))-> ((show y))
 })
 }
 ;

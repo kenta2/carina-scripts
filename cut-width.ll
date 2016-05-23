@@ -5,7 +5,7 @@
  (gz module (f decl-mark id :class language-pragma-opt exports imports topdecl-star j
              ::pr("[[language-pragma-opt]]module [[id]] [[exports]] where{\n[[imports]]\n"
                   "[[topdecl-star('',';\n','\n')]]}\n\n")))
- (gz language-pragma ( :language-pragma f id-non-star j 
+ (gz language-pragma ( :language-pragma f id-non-star j
 					::pr
 					("{-# LANGUAGE [[id-non-star('',',','')]] #-}\n")))
  (gz exports (f export-star j
@@ -16,7 +16,7 @@
  (gz import(id ::pr( "import [[id]]"))
      (f :qualified (original-name ::is id) (new-name ::is id) j
 	::pr ( "import qualified [[original-name]] as [[new-name]]")))
- 
+
 (gz type-class (f decl-mark (class-name ::is id) :type-class context-opt  id-non-plus f type-class-decl-star j j
                  ::pr("class [[context-opt]][[class-name]] [[id-non-plus('',' ','')]] where{\n"
                       "[[type-class-decl-star('',';\n','\n')]]}")))
@@ -51,7 +51,7 @@
  (gz decls (  decl-star  ::pr("{[[decl-star('\n',';\n','\n')]]}\n")))
  (gz context (:context f a-context-plus j ::pr
               ("[[a-context-plus('(',', ',')')]] => ")))
- (gz a-context [(f (type ::is id) id-non-plus j 
+ (gz a-context [(f (type ::is id) id-non-plus j
 		  ::pr("[[type]] [[id-non-plus('',' ','')]]"))]
      (f (class ::is id) type-plus j
 	::pr("[[class]] [[type-plus('(',')(',')')]]"))
@@ -95,20 +95,20 @@
  (gz pattern
   (f  pattern-ctor pattern-star j
    ::pr ("([[pattern-ctor]][[pattern-star('',' ','')]])"))
-  
+
   (f pattern-ctor :fpat f fpat-star j j
    ::pr ("[[pattern-ctor]][[fpat-star('{',', ','}')]]"))
-   
+
   (f :ptuple pattern-plus j [pattern-plus cuz :nil exists for empty lists]
    ::pr("[[pattern-plus('(',', ',')')]]"))
-  
+
   (f :plist pattern-plus j [pattern-plus cuz :nil exists for empty lists]
-   ::pr("[[pattern-plus('\x5b',', ','\x5d')]]"))
-  
+     ::pr("[[pattern-plus('\x5b',', ','\x5d')]]"))
+
   (f :pchar astring j ::pr("(\x27[[astring]]\x27)"))
 
   (f :pstring astring j ::pr("\x22[[astring]]\x22"))
-  
+
   (f :as id pattern j ::pr("[[id]]@[[pattern]]"))
   )
  (gz pattern-ctor (id) (:cons ::pr ("(:)")) (:nil ::pr ("[]")))
@@ -169,7 +169,7 @@
   (f :cc expr-star j ::pr ("[[expr-star('(',' ++ ',')')]]"))
   (qastring)
   (f :lit astring j ::pr("[[astring]]"))
-  
+
   (f :ty type expr j ::pr("([[expr]] :: [[type]])"))
   (f (fun-name ::is expr) expr-star j
    ::pr ("([[fun-name]][[expr-star(' ',' ','')]])"))
@@ -193,7 +193,7 @@
   (f :cons-list expr-star j ::pr("[[expr-star('(',':',')')]]"))
   (f :mtuple expr-star j ::pr("[[expr-star('(',', ',')')]]"))
   (:nothing  ::pr ("()"))
-  
+
   (f :lambda name ret-type-and-params expr j
      ::pr("(let {[[name]] :: [[ret-type-and-params]];\n"
           "[[name]]"
@@ -232,12 +232,12 @@
     System.IO
     System.Environment
     [Data.Word]
-    Data.Char
+    [Data.Char]
     [(:qualified System.IO.Unsafe Unsafe)]
     [Array]
-    Data.List
+    [Data.List]
     [Random]
-    Data.Ord
+    [Data.Ord]
     [Maybe]
     [Data.Array.IO]
     )
@@ -257,16 +257,16 @@
 						       putStrLn
 						       ))
 	 ((:plist(:pstring "test")(x)(y))(test(read x)(read y)))
-
+         ((_)undefined)
          ))
        ))
 
 [   (: show-list :fun :context ((Show(a)))(String)((l(:list(a))))
      (unlines (map show l))
      )
-   
+
    (: quiet :fun(Bool)() False)
-   
+
    (: cerr :fun(a)((message (:list(String)))(x(a)))
       (:case quiet
         ((True)x)
@@ -281,7 +281,7 @@
              (:do
               (hPutStrLn stderr message )
               (return x))))))
-   
+
    (: cerr-x :fun(a)((_(:list(String)))(x(a)))x)
 
    (: peek :fun :context((Show(a)))(a)((x(a)))
@@ -314,13 +314,11 @@
    (: enum-from-count :fun :context ((Enum(a))) (:list(a))
      ((start(a))(count(Int)))
      (take count (enumFrom start)))
-   
+
    (: map-tuple :fun(:tuple(b)(b))((fn(:fn(b)((x(a)))))
                                  (x(:tuple(a)(a))))
      (:mtuple (fn (fst x))(fn (snd x))))
 
-
-   
    [(: sort-by-extractor :fun :context ((Ord(b)))(:list(a))
      ((extract(:fn(b)((x(a)))))(l(:list(a))))
      (:let
@@ -380,7 +378,7 @@
 	      (:mcons(f a b)
 		     (zipWith-check-same-length f arest brest)))))
    ]
-   (: powers-of-two :fun :no-sig(:list(a))()
+   (: powers-of-two :fun (:list(Int))()
      (:mcons 1 (map (* 2) powers-of-two)))
    [
    (: binary-to-decimal :fun :no-sig (Int) ((bits(:list(Int))))
@@ -401,14 +399,13 @@
       (concatMap (uncurry (flip replicate)) ((uncurry zip-check-same-length)
                                              rle))
       ))]
-   
 
    (: apply-first :fun(:tuple(b)(c))((fn(:fn(b)((_(a)))))(x(:tuple(a)(c))))
       (:mtuple (fn (fst x))(snd x)))
 
    (: apply-second :fun(:tuple(c)(b))((fn(:fn(b)((_(a)))))(x(:tuple(c)(a))))
       (:mtuple (fst x)(fn (snd x))))
-   
+
    (: RLE :type-synonym (a)(:tuple(:list(a))(:list(Int))))
 
    (: diffs :fun :no-sig (Maybe(:list(Int))) ((l(:list(Int))))
@@ -448,7 +445,7 @@
 
    (: is-suffix :fun :context ((Eq(a))) (Bool) ((suffix(:list(a)))(l(:list(a))))
      (is-prefix (reverse suffix) (reverse l)))
-   
+
    (: concatenate-many-files :fun(IO(String))((files(:list(String))))
      (:join
       (mapM readFile files) (:rcompose concat return))
@@ -508,9 +505,9 @@
         ((:ptuple(:nil)(_))LT)
         ((:ptuple(_)(:nil))GT)
         ((_)(compare-length-lists (tail x)(tail y)))))
-   
-   (: ordering-to-equality :fun :forall (a) 
-      (:fn(Bool)((x(a))(y(a)))) 
+
+   (: ordering-to-equality :fun :forall (a)
+      (:fn(Bool)((x(a))(y(a))))
       ((compare-function(:fn(Ordering)((x(a))(y(a))))))
       (:let
        (: ret-val :fun (Bool) ((x(a))(y(a)))
@@ -584,7 +581,7 @@
 	      (:case (compare 0 n)
 		 ((EQ)(:mcons new-value tail))
 		 ((LT)
-		  (:mcons head 
+		  (:mcons head
 			  (list-change-at-index tail (pred n) new-value))))))
       [(:cc (take n l) (:mlist new-value) (drop (+ 1 n) l))
        does not fail for out of index
@@ -594,7 +591,7 @@
       (:case x
 	     ((:ptuple(i)(j))(:mtuple j i))))
 
-   (: mk-1-map-array :fun (Array(Int)(b)) 
+   (: mk-1-map-array :fun (Array(Int)(b))
       ((fn(:fn(b)((x(a)))))
        (la(:list(a))))
       (listArray (:mtuple 1 (length la))
@@ -617,14 +614,14 @@
    [(: continue-through :fun b ((pred(Bool))(x(b)))
       (:case pred
 	     ((True)x)))]
-       
+
    (: singleton :fun (:list a) ((x a))
       (:mlist x))
    (: zero-array :fun (Array Int a)((l(:list a)))
       (listArray (:mtuple 0 (:rpipe l length pred)) l))
    ]
    (: rcs-code :fun String ()
-      "$Id: cut-width.ll,v 1.1 2016/05/16 07:22:55 kenta Exp kenta $")
+      "$Id: cut-width.ll,v 1.3 2016/05/23 01:39:42 kenta Exp $")
 
    (: div-rounding-up :fun Int ((x Int)(y Int))
       (:case (divMod x y)
@@ -657,8 +654,8 @@
       (:case rscale
 	     ((Rescale(1))(:mlist))
 	     ((Rescale(x))
-	      (:cc 
-	       "| pnmscale "(show (/ 1.0 (fromIntegral x)))" "))))
+	      (:cc
+	       "| pnmscale "(show (/ (:ty Double 1.0) (fromIntegral x)))" "))))
    (: do-rotation :fun String ((rot String))
       (:case rot
 	     ((:nil)(:mlist))
@@ -666,8 +663,8 @@
    (:instance Show (Rescale)
 	      (: show :fun :no-sig Int ((x(Rescale)))
 		 (:case x
-			((Rescale(x))(:cc(show x))))))
-   (: big-column :fun String 
+			((Rescale(y))(:cc(show y))))))
+   (: big-column :fun String
       ((big-height Int)(rescale Rescale)(rotations(:list String))(width Int)(height Int)(hcut Int))
       (:cc
        "pnmcut "(show hcut)" 0 "(show width)" 0 original >| a\n"
@@ -706,12 +703,10 @@
    (: test :fun (IO :unit)((width Int)(height Int))
       (:do
        (putStrLn"set -x")
-       (putStrLn"set -C")       
-       (putStrLn"set -e")       
+       (putStrLn"set -C")
+       (putStrLn"set -e")
       (putStr(run-rescales [29566 14321 1360 768]
 			   29566 14321 width height
 			   ))))
-       
-       
 )
 
