@@ -16,14 +16,17 @@ main = (do{
 powers_of_two :: [](Int);
 powers_of_two = ((:) 1 (map ((*) 2) powers_of_two));
 rcs_code :: String;
-rcs_code = "$Id: cut-width.ll,v 1.2 2016/05/23 01:28:45 kenta Exp kenta $";
+rcs_code = "$Id: cut-width.ll,v 1.3 2016/05/23 01:39:42 kenta Exp kenta $";
 div_rounding_up :: Int -> Int -> Int;
 div_rounding_up x y = (case (divMod x y) of {
   ((d), (0))-> d;
   ((d), (_))-> (succ d)
 });
 cut_points :: Int -> Int -> [](Int);
-cut_points big small = (let {
+cut_points big small = (case (compare small big) of {
+  (GT)-> [];
+  (EQ)-> [0];
+  (LT)-> (let {
 numpieces :: Int;
 numpieces = (pred (div_rounding_up big small));
 last_one :: Int;
@@ -31,7 +34,8 @@ last_one = ((-) big small);
 f :: Int -> Int;
 f i = (div ((*) i last_one) numpieces)
 }
- in ((map f)((enumFromTo 0 numpieces))));
+ in ((map f)((enumFromTo 0 numpieces))))
+});
 one_pnmcut :: Int -> Int -> String;
 one_pnmcut height vcut = ("pnmcut 0 " ++ (show vcut) ++ " 0 " ++ (show height) ++ " a ");
 one_pipeline :: Rescale -> [](String) -> Int -> Int -> Int -> String;

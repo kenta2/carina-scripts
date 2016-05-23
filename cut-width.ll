@@ -621,7 +621,7 @@
       (listArray (:mtuple 0 (:rpipe l length pred)) l))
    ]
    (: rcs-code :fun String ()
-      "$Id: cut-width.ll,v 1.3 2016/05/23 01:39:42 kenta Exp $")
+      "$Id: cut-width.ll,v 1.4 2016/05/23 01:49:32 kenta Exp kenta $")
 
    (: div-rounding-up :fun Int ((x Int)(y Int))
       (:case (divMod x y)
@@ -629,15 +629,19 @@
 	     ((:ptuple(d)(_))(succ d))))
 
    (: cut-points :fun (:list Int) ((big Int)(small Int))
-      (:let
-       (: numpieces :fun Int () (pred(div-rounding-up big small)))
-       (: last-one :fun Int () (- big small))
-       (: f :fun Int ((i Int))
-	  (div (* i last-one) numpieces))
-       (:rpipe
-	(enumFromTo 0 numpieces)
-	(map f))
-       ))
+      (:case(compare small big)
+            ((GT) (:mlist))
+            ((EQ) (:mlist 0))
+            ((LT)
+             (:let
+              (: numpieces :fun Int () (pred(div-rounding-up big small)))
+              (: last-one :fun Int () (- big small))
+              (: f :fun Int ((i Int))
+                 (div (* i last-one) numpieces))
+              (:rpipe
+               (enumFromTo 0 numpieces)
+               (map f))
+              ))))
    (: one-pnmcut :fun String ((height Int)(vcut Int))
       (:cc "pnmcut 0 "(show vcut)" 0 "(show height)" a "))
    (: one-pipeline :fun String ((rescale Rescale)(rotations(:list String))(hcut Int)(height Int)(vcut Int))
