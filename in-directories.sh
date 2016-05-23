@@ -7,3 +7,5 @@ fi
 input="$1"
 mkdir jpg
 find . -maxdepth 1 -name $input-a-\*-'[rgb][rgb][rgb]-[01][01][01]'-z.jpg -type f -exec mv '{}' jpg/ \;
+cd jpg
+bash ../carina-scripts/sort-by-filter.sh
