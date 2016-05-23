@@ -39,7 +39,7 @@ do zwidth=$(printf '%05d' $width)
     for hei in `$cut_width cut-points $bigwidth $smallheight`
     do zhei=$(printf '%05d' $hei)
         #echo hh $hei $zhei
-        pnmcut $hei 0 $smallheight 0 $tempfile | pnmflip -r90 | pnmtopng > $input-a-y0-$zsmallheight-$zwidth-$zhei.png
+        pnmcut $hei 0 $smallheight 0 $tempfile | pnmflip -r90 | pnmtopng > $input-a-0y-$zsmallheight-$zwidth-$zhei.png
     done
 done
 
@@ -51,7 +51,7 @@ do zwidth=$(printf '%05d' $width)
     for hei in `$cut_width cut-points $bigheight $smallheight`
     do zhei=$(printf '%05d' $hei)
         #echo hh $hei $zhei
-        pnmcut 0 $hei 0 $smallheight $tempfile | pnmtopng > $input-a-x0-$zsmallheight-$zwidth-$zhei.png
+        pnmcut 0 $hei 0 $smallheight $tempfile | pnmtopng > $input-a-0x-$zsmallheight-$zwidth-$zhei.png
     done
 done
 

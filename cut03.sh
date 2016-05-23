@@ -26,13 +26,8 @@ script=carina-scripts/cut02.sh
 date
 bash $script $input $smallwidth $smallheight
 date
-for file in $input-a-x0-*png
-do suff=${file##$input-a-x0}
-    pngtopnm $file | pnmflip -r180 | pnmtopng > $input-a-x1$suff
-done
-date
-for file in $input-a-y0-*png
-do suff=${file##$input-a-y0}
-    pngtopnm $file | pnmflip -r180 | pnmtopng > $input-a-y1$suff
+for file in $input-a-0[xy]-*png
+do suff=${file##$input-a-0}
+    pngtopnm $file | pnmflip -r180 | pnmtopng > $input-a-1$suff
 done
 date

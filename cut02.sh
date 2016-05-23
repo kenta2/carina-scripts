@@ -27,7 +27,7 @@ script=carina-scripts/cut01.sh
 if [ "$do_half_size" = "1" ]
 then bash $script $input $smallwidth $smallheight
 z=$(printf "%05d" $smallheight)
-for file in $input-a-[xy]0-$z-*
+for file in $input-a-0[xy]-$z-*
 do pngtopnm $file | pnmscale 2 | pnmtopng > temp
     mv temp $file
 done
@@ -46,7 +46,7 @@ smallwidth=$(expr $smallwidth + $smallwidth)
 smallheight=$(expr $smallheight + $smallheight)
 bash $script $input $smallwidth $smallheight
 z=$(printf "%05d" $smallheight)
-for file in $input-a-[xy]0-$z-*
+for file in $input-a-0[xy]-$z-*
 do pngtopnm $file | pnmscale 0.5 | pnmtopng > temp
     mv temp $file
 done
@@ -57,7 +57,7 @@ smallwidth=$(expr $smallwidth + $smallwidth)
 smallheight=$(expr $smallheight + $smallheight)
 bash $script $input $smallwidth $smallheight
 z=$(printf "%05d" $smallheight)
-for file in $(find . -maxdepth 1 -type f -name $input-a-'[xy]0-'$z-'*')
+for file in $(find . -maxdepth 1 -type f -name $input-a-'0[xy]-'$z-'*')
 do pngtopnm $file | pnmscale 0.25 | pnmtopng > temp
     mv temp $file
 done
