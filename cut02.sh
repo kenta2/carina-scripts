@@ -26,7 +26,7 @@ date
 script=carina-scripts/cut01.sh
 if [ "$do_half_size" = "1" ]
 then bash $script $input $smallwidth $smallheight
-z=$(printf "%05d" $smallwidth)
+z=$(printf "%05d" $smallheight)
 for file in $input-a-[xy]0-$z-*
 do pngtopnm $file | pnmscale 2 | pnmtopng > temp
     mv temp $file
@@ -45,12 +45,21 @@ date
 smallwidth=$(expr $smallwidth + $smallwidth)
 smallheight=$(expr $smallheight + $smallheight)
 bash $script $input $smallwidth $smallheight
-z=$(printf "%05d" $smallwidth)
+z=$(printf "%05d" $smallheight)
 for file in $input-a-[xy]0-$z-*
 do pngtopnm $file | pnmscale 0.5 | pnmtopng > temp
     mv temp $file
 done
 
 #smallest is 7121
+
+smallwidth=$(expr $smallwidth + $smallwidth)
+smallheight=$(expr $smallheight + $smallheight)
+bash $script $input $smallwidth $smallheight
+z=$(printf "%05d" $smallheight)
+for file in $input-a-[xy]0-$z-*
+do pngtopnm $file | pnmscale 0.25 | pnmtopng > temp
+    mv temp $file
+done
 
 date
