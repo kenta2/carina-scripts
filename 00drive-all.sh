@@ -14,5 +14,6 @@ tifftopnm hs-2015-29-a-full_tif.tif > veil/veil
 for file in veil orion tarantula carina
 do pushd $file
     bash carina-scripts/01go.sh $file
+    rm $file
     popd
 done
