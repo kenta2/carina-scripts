@@ -6,6 +6,7 @@ if ! [ -r $input ]
 then exit 1
 fi
 ppmtorgb3 < $input
+percent=0.3
 for file in red grn blu
 do if ! [ "$no_normalize" = "1" ]
     then pgmhist noname.$file
@@ -18,7 +19,7 @@ do if ! [ "$no_normalize" = "1" ]
             else
                 : no normalization necessary
             fi
-        else pnmnorm -bpercent 1 -wpercent 1 noname.$file > temp
+        else pnmnorm -bpercent $percent -wpercent $percent noname.$file > temp
             mv temp noname.$file
         fi
     fi
