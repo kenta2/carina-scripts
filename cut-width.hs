@@ -9,6 +9,7 @@ main = (do{
   (getArgs >>= (\lambda_case_var ->case lambda_case_var of {
   ["nothing"]-> (return ());
   ["cut-points", (x), (y)]-> (putStrLn(unwords((map show)((cut_points (read x) (read y))))));
+  ["double-cut-points", (x), (y)]-> (putStrLn(unwords((map show)((double_cut_points (read x) (read y))))));
   ["test", (x), (y)]-> (test (read x) (read y));
   (_)-> undefined
 }));
@@ -16,7 +17,7 @@ main = (do{
 powers_of_two :: [](Int);
 powers_of_two = ((:) 1 (map ((*) 2) powers_of_two));
 rcs_code :: String;
-rcs_code = "$Id: cut-width.ll,v 1.3 2016/05/23 01:39:42 kenta Exp kenta $";
+rcs_code = "$Id: cut-width.ll,v 1.6 2016/06/06 17:00:46 kenta Exp $";
 div_rounding_up :: Int -> Int -> Int;
 div_rounding_up x y = (case (divMod x y) of {
   ((d), (0))-> d;
@@ -35,6 +36,25 @@ f :: Int -> Int;
 f i = (div ((*) i last_one) numpieces)
 }
  in ((map f)((enumFromTo 0 numpieces))))
+});
+double_cut_points :: Int -> Int -> [](Int);
+double_cut_points big small = (case (compare small big) of {
+  (GT)-> [];
+  (EQ)-> [0];
+  (LT)-> (let {
+last_one :: Int;
+last_one = ((-) big small);
+n1 :: Int;
+n1 = (div last_one small);
+n2 :: Int;
+n2 = (case n1 of {
+  (0)-> 1;
+  (_)-> ((*) 2 n1)
+});
+f :: Int -> Int;
+f i = (div ((*) i last_one) n2)
+}
+ in ((map f)((enumFromTo 0 n2))))
 });
 one_pnmcut :: Int -> Int -> String;
 one_pnmcut height vcut = ("pnmcut 0 " ++ (show vcut) ++ " 0 " ++ (show height) ++ " a ");

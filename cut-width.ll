@@ -256,6 +256,12 @@
 						       unwords
 						       putStrLn
 						       ))
+         ((:plist(:pstring "double-cut-points")(x)(y))
+          (:rpipe (double-cut-points (read x)(read y))
+                  (map show)
+                  unwords
+                  putStrLn
+                  ))
 	 ((:plist(:pstring "test")(x)(y))(test(read x)(read y)))
          ((_)undefined)
          ))
@@ -621,7 +627,7 @@
       (listArray (:mtuple 0 (:rpipe l length pred)) l))
    ]
    (: rcs-code :fun String ()
-      "$Id: cut-width.ll,v 1.4 2016/05/23 01:49:32 kenta Exp kenta $")
+      "$Id: cut-width.ll,v 1.6 2016/06/06 17:00:46 kenta Exp kenta $")
 
    (: div-rounding-up :fun Int ((x Int)(y Int))
       (:case (divMod x y)
@@ -642,6 +648,29 @@
                (enumFromTo 0 numpieces)
                (map f))
               ))))
+(: double-cut-points :fun (:list Int)((big Int)(small Int))
+   (:case (compare small big)
+          ((GT)(:mlist))
+          ((EQ)(:mlist 0))
+          ((LT)
+           (:let
+            (: last-one :fun Int () (- big small))
+            (: n1 :fun Int () (div last-one small))
+            (: n2 :fun Int ()
+               (:case n1
+                      ((0)
+                       [avoid division by zero i cases like 3 2 and 100 51,
+                              though not sure this is the desired behavior.]
+                       1)
+                       ((_)(* 2 n1))))
+               (: f :fun Int ((i Int))
+                  (div (* i last-one) n2))
+            (:rpipe
+             (enumFromTo 0 n2)
+             (map f))
+            ))))
+[double-cut-points 100 34 produces seemingly weird but correct results.
+ Seemingly not densely sampled enough.  Similar to the division by 0 of 100 51.]
    (: one-pnmcut :fun String ((height Int)(vcut Int))
       (:cc "pnmcut 0 "(show vcut)" 0 "(show height)" a "))
    (: one-pipeline :fun String ((rescale Rescale)(rotations(:list String))(hcut Int)(height Int)(vcut Int))
